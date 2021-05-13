@@ -2,7 +2,7 @@ import station_state, datetime, device
 
 
 class Station(device.Device):
-    
+
 
     def __init__(self, address, capture_time):
 
@@ -16,19 +16,21 @@ class Station(device.Device):
 
     def update(self):
 
-        if self.state.is_initial and (datetime.datetime.now() - self.timeline[-1]).seconds < 2:
+        if self.state.is_initial: # and (datetime.datetime.now() - self.timeline[-1]).seconds < 2:
             self.state.accept()
-        elif self.state.is_potential_in and (datetime.datetime.now() - self.timeline[-1]).seconds < 2:
+            #print(datetime.datetime.now(), self.timeline[-1])
+            #print((datetime.datetime.now() - self.timeline[-1]).seconds)
+        elif self.state.is_potential_in and (datetime.datetime.now() - self.timeline[-1]).seconds < 20:
             self.state.confirm_in()
-        elif self.state.is_potential_in and (datetime.datetime.now() - self.timeline[-1]).seconds > 2:
+        elif self.state.is_potential_in and (datetime.datetime.now() - self.timeline[-1]).seconds > 20:
             self.state.restart_in()
-        elif self.state.is_present and (datetime.datetime.now() - self.timeline[-1]).seconds > 2:
+        elif self.state.is_present and (datetime.datetime.now() - self.timeline[-1]).seconds > 20:
             self.state.detach()
-        elif self.state.is_potential_out and (datetime.datetime.now() - self.timeline[-1]).seconds < 2:
+        elif self.state.is_potential_out and (datetime.datetime.now() - self.timeline[-1]).seconds < 20:
             self.state.back_in()
-        elif self.state.is_potential_out and (datetime.datetime.now() - self.timeline[-1]).seconds > 2:
+        elif self.state.is_potential_out and (datetime.datetime.now() - self.timeline[-1]).seconds > 20:
             self.state.confirm_out()
-        elif self.state.is_absent and (datetime.datetime.now() - self.timeline[-1]).seconds > 2:
+        elif self.state.is_absent and (datetime.datetime.now() - self.timeline[-1]).seconds > 20:
             self.state.restart_out()
 
 
